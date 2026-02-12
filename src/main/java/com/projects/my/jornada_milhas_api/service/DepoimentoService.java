@@ -4,12 +4,10 @@ import com.projects.my.jornada_milhas_api.dto.ExibirDadosDepoimentoDto;
 import com.projects.my.jornada_milhas_api.dto.SalvarDepoimentoDto;
 import com.projects.my.jornada_milhas_api.entity.Depoimento;
 import com.projects.my.jornada_milhas_api.repository.DepoimentoRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class DepoimentoService {
@@ -23,9 +21,19 @@ public class DepoimentoService {
                 .map(ExibirDadosDepoimentoDto::new);
     }
 
-    public Depoimento save(@RequestBody @Valid SalvarDepoimentoDto dto) {
+    public ExibirDadosDepoimentoDto save(SalvarDepoimentoDto dto) {
         Depoimento depoimento = new Depoimento(dto);
+        depoimentoRepository.save(depoimento);
 
-        return depoimentoRepository.save(depoimento);
+        return new ExibirDadosDepoimentoDto(depoimento);
+    }
+
+    public ExibirDadosDepoimentoDto findDepoimento(Long id) {
+        return new ExibirDadosDepoimentoDto(findDepoimentoById(id));
+    }
+
+    private Depoimento findDepoimentoById(Long id) {
+        return depoimentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Depoimento não encontrado"));
     }
 }
