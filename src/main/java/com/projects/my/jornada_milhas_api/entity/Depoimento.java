@@ -2,6 +2,7 @@ package com.projects.my.jornada_milhas_api.entity;
 
 import com.projects.my.jornada_milhas_api.dto.SalvarDepoimentoDto;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,11 +21,5 @@ public class Depoimento {
     private String foto;
     private String depoimento;
     private String nomePessoa;
-
-    public Depoimento(SalvarDepoimentoDto dto){
-        this.foto = dto.foto();
-        this.depoimento = dto.depoimento();
-        this.nomePessoa = dto.nomePessoa();
-    }
 
 }

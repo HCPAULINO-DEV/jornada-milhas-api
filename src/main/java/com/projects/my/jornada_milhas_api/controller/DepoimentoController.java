@@ -2,7 +2,6 @@ package com.projects.my.jornada_milhas_api.controller;
 
 import com.projects.my.jornada_milhas_api.dto.ExibirDadosDepoimentoDto;
 import com.projects.my.jornada_milhas_api.dto.SalvarDepoimentoDto;
-import com.projects.my.jornada_milhas_api.entity.Depoimento;
 import com.projects.my.jornada_milhas_api.service.DepoimentoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class DepoimentoController {
 
     @PostMapping
     public ResponseEntity<ExibirDadosDepoimentoDto> save(@RequestBody @Valid SalvarDepoimentoDto dto, UriComponentsBuilder uriBuilder) {
-        ExibirDadosDepoimentoDto depoimento = depoimentoService.save(dto);
+        ExibirDadosDepoimentoDto depoimento = depoimentoService.saveDepoimento(dto);
         var uri = uriBuilder.path("/depoimentos/{id}").buildAndExpand(depoimento.id()).toUri();
         return ResponseEntity.created(uri).body(depoimento);
     }
@@ -35,6 +34,17 @@ public class DepoimentoController {
     @GetMapping("/{id}")
     public ResponseEntity<ExibirDadosDepoimentoDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(depoimentoService.findDepoimento(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ExibirDadosDepoimentoDto> update(@PathVariable Long id, @RequestBody @Valid SalvarDepoimentoDto dto) {
+        return ResponseEntity.ok(depoimentoService.updateDepoimento(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        depoimentoService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
