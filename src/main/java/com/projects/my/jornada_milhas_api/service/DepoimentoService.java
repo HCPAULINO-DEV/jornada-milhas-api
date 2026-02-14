@@ -5,6 +5,7 @@ import com.projects.my.jornada_milhas_api.dto.SalvarDepoimentoDto;
 import com.projects.my.jornada_milhas_api.entity.Depoimento;
 import com.projects.my.jornada_milhas_api.repository.DepoimentoRepository;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,5 +51,9 @@ public class DepoimentoService {
 
     public void delete(Long id) {
         depoimentoRepository.delete(findDepoimentoById(id));
+    }
+
+    public @Nullable Page<ExibirDadosDepoimentoDto> findThreeRandomDepoimento(Pageable pageable) {
+        return depoimentoRepository.findThreeRandom(pageable).map(ExibirDadosDepoimentoDto::new);
     }
 }

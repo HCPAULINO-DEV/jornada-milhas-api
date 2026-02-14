@@ -13,38 +13,42 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("/depoimentos")
 public class DepoimentoController {
 
     @Autowired
     private DepoimentoService depoimentoService;
 
-    @PostMapping
+    @PostMapping("/depoimentos")
     public ResponseEntity<ExibirDadosDepoimentoDto> save(@RequestBody @Valid SalvarDepoimentoDto dto, UriComponentsBuilder uriBuilder) {
         ExibirDadosDepoimentoDto depoimento = depoimentoService.saveDepoimento(dto);
         var uri = uriBuilder.path("/depoimentos/{id}").buildAndExpand(depoimento.id()).toUri();
         return ResponseEntity.created(uri).body(depoimento);
     }
 
-    @GetMapping
+    @GetMapping("/depoimentos")
     public ResponseEntity<Page<ExibirDadosDepoimentoDto>> findAll(@PageableDefault(sort = "id", size = 9) Pageable pageable) {
         return ResponseEntity.ok(depoimentoService.findAll(pageable));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/depoimentos/{id}")
     public ResponseEntity<ExibirDadosDepoimentoDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok(depoimentoService.findDepoimento(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/depoimentos/{id}")
     public ResponseEntity<ExibirDadosDepoimentoDto> update(@PathVariable Long id, @RequestBody @Valid SalvarDepoimentoDto dto) {
         return ResponseEntity.ok(depoimentoService.updateDepoimento(id, dto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/depoimentos/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         depoimentoService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/depoimentos-home")
+    public ResponseEntity<Page<ExibirDadosDepoimentoDto>> findThreeDepoimento(@PageableDefault(size = 3) Pageable pageable) {
+        return ResponseEntity.ok(depoimentoService.findThreeRandomDepoimento(pageable));
     }
 
 }
